@@ -1,104 +1,314 @@
-/* CSS Variables for Theme Management */
+/* Ocean Professional Theme - Centralized CSS Variables */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  /* Theme palette */
+  --color-primary: #2563EB;       /* Primary */
+  --color-secondary: #F59E0B;     /* Secondary/Success */
+  --color-success: #F59E0B;
+  --color-error: #EF4444;
+  --color-bg: #f9fafb;            /* Background */
+  --color-surface: #ffffff;       /* Surface cards */
+  --color-text: #111827;          /* Text */
+
+  /* Elevation and radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 4px 10px rgba(17, 24, 39, 0.08);
+  --shadow-lg: 0 12px 24px rgba(17, 24, 39, 0.10);
+
+  /* Typography scale */
+  --font-title: clamp(1.5rem, 2.5vw, 2.25rem);
+  --font-subtitle: clamp(1rem, 1.5vw, 1.125rem);
+  --font-body: 1rem;
+
+  /* Spacing */
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* Board sizing */
+  --cell-min: 56px; /* >= 44px touch targets */
+  --cell-gap: 10px;
+  --board-max: min(90vw, 520px);
 }
 
+/* Respect dark theme toggle infra if extended later */
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  --color-bg: #0f172a;         /* slate-900-ish */
+  --color-surface: #111827;    /* gray-900 */
+  --color-text: #f9fafb;       /* near-white */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
+/* App shell with subtle blue-to-gray gradient background */
 .App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
   min-height: 100vh;
+  text-align: center;
+  color: var(--color-text);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(37, 99, 235, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(37, 99, 235, 0.05), rgba(249, 250, 251, 0.6)),
+    var(--color-bg);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+/* Container card for the game */
+.game-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 32px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  gap: var(--space-6);
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+/* Header typography */
+.game-header {
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: clamp(16px, 3vw, 28px);
+  display: grid;
+  gap: var(--space-4);
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
+.game-title {
+  margin: 0;
+  font-size: var(--font-title);
+  letter-spacing: 0.3px;
+  color: var(--color-text);
+}
+
+.status-banner {
+  margin: 0 auto;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: var(--font-subtitle);
   font-weight: 600;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  color: var(--color-text);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 200ms ease, color 200ms ease;
+}
+.status-banner.status-next {
+  border-color: rgba(37, 99, 235, 0.25);
+  background: rgba(37, 99, 235, 0.06);
+  color: #0b3aa7;
+}
+.status-banner.status-win {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.1);
+  color: #8a5a03;
+}
+.status-banner.status-draw {
+  border-color: rgba(17, 24, 39, 0.15);
+  background: rgba(17, 24, 39, 0.05);
+  color: var(--color-text);
+}
+
+/* Player badges */
+.player-indicators {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: var(--shadow-sm);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.badge .badge-label {
+  font-weight: 700;
+  font-size: 14px;
+}
+.badge .badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+.badge.active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.badge-x .badge-label { color: var(--color-primary); }
+.badge-o .badge-label { color: var(--color-secondary); }
+
+/* Board wrapper to center and space */
+.board-wrap {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(14px, 2.5vw, 22px);
+}
+
+/* 3x3 grid board */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--cell-gap);
+  width: 100%;
+  max-width: var(--board-max);
+  margin: 0 auto;
+}
+
+/* Board cells as square buttons with min touch target >=44px (using 56px) */
+.cell {
+  position: relative;
+  aspect-ratio: 1 / 1; /* keeps perfect squares */
+  min-width: var(--cell-min);
+  min-height: var(--cell-min);
+  background: linear-gradient(180deg, #ffffff, #f7f9fc);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
+  display: grid;
+  place-items: center;
+  outline: none;
 }
 
-.theme-toggle:hover {
+.cell:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
 }
 
-.theme-toggle:active {
+.cell:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), var(--shadow-md);
+}
+
+.cell:disabled {
+  cursor: default;
+  opacity: 0.95;
+}
+
+/* Mark styles */
+.mark {
+  font-size: clamp(1.75rem, 6.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  user-select: none;
+  transition: transform 150ms ease, color 150ms ease;
+}
+.mark-x { color: var(--color-primary); }
+.mark-o { color: var(--color-secondary); }
+
+/* Winning highlight */
+.cell.win {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.12), rgba(255, 255, 255, 0.9));
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25), var(--shadow-md);
+}
+
+/* Controls footer */
+.controls {
+  width: 100%;
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease, opacity 180ms ease;
+  cursor: pointer;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+.btn:active {
   transform: translateY(0);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.btn.primary {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: rgba(37, 99, 235, 0.8);
+}
+.btn.primary:hover {
+  background: #1e55c7;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--color-text);
+}
+.btn.ghost.active {
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* History details */
+.history {
+  width: 100%;
+  max-width: 760px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-4);
+}
+.history-summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-primary);
+  outline: none;
+}
+.history-list {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-5);
+  text-align: left;
+  display: grid;
+  gap: 8px;
+}
+
+/* Responsive tuning */
+@media (max-width: 768px) {
+  :root {
+    --cell-gap: 8px;
   }
-  to {
-    transform: rotate(360deg);
+  .game-shell {
+    gap: var(--space-5);
+  }
+  .status-banner {
+    font-size: 0.95rem;
   }
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+/* Motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
   }
 }
